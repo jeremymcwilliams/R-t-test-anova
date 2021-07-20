@@ -5,7 +5,7 @@ output: pdf_document
 
 # T-Tests and ANOVAs
 
-Today we're going to dive into some statistical capabilities using R....specifically t-tests and linear regression. We're going to practice using some code to generate these statistical measures, and use ggplot to create corresponding visualizations. 
+Today we're going to dive into some statistical capabilities using R....specifically t-tests and ANOVAs. We're going to practice using some code to generate these statistical measures, and use ggplot to create corresponding visualizations. 
 
 
 ## t-tests
@@ -142,10 +142,17 @@ ggplot(data=penguins, mapping = aes(species, bill_length_mm))+geom_boxplot()
 
 YOUR TURN:
 
-Use the ANOVA test to check for differences in bill depth among the three species. Create a bar plot to show the results.
+* Use the ANOVA test to check for differences in bill depth among the three species. 
+* Create a bar plot to show the results.
 
 
 ```{r}
+
+
+
+
+
+
 
 ```
 
