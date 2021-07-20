@@ -1,19 +1,131 @@
 ---
-title: "R Notebook"
-output: html_notebook
+title: "T-Tests & Linear Regression"
+output: pdf_document
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+# T-Tests and ANOVAs
 
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+Today we're going to dive into some statistical capabilities using R....specifically t-tests and linear regression. We're going to practice using some code to generate these statistical measures, and use ggplot to create corresponding visualizations. 
+
+
+## t-tests
+
+A t-test is used to  determine if there is a significant difference between the means of two groups, assuming normal distribution in both groups. 
+
+Let's start off by loading the tidyverse, and loading/viewing our penguin data:
+
+
 
 ```{r}
-plot(cars)
+library(tidyverse)
+library(palmerpenguins)
+
+penguins
+
 ```
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+Let's say we want to run a t-test comparing flipper length of Adelie vs Chinstrap penguins. First, we'll use the 'filter' and 'select' functions to limit our data to Adelie & Chinstrap, and only include the species and flipper_length_mm columns:
 
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+```{r}
+
+flippers<-penguins %>% filter(species=="Adelie" | species=="Chinstrap") %>% select(species, flipper_length_mm)
+
+
+
+flippers
+
+```
+
+
+Now we can plug this dataset into the t.test function:
+
+
+```{r}
+
+t.test(flipper_length_mm ~ species, data=flippers)
+
+
+```
+
+
+Based upon the output, the p-value is way below 0.05, which is often the threshold for statistical significance. It can be interpreted as: "there is a <p-value> probability that the differences in the mean are due to random chance".
+
+
+YOUR TURN:
+
+Run a t-test comparing the bill length between Gentoo and Adelie penguins. Are the means significantly different?
+
+
+```{r}
+
+
+
+
+```
+
+
+
+## Plots for t-test 
+
+We can use ggplot to generate plots to visualize our data. First, we can try a boxplot:
+
+
+
+```{r}
+ggplot(data=flippers, mapping = aes(species, flipper_length_mm))+geom_boxplot()
+
+
+```
+
+
+
+We can also create a bar plot, though first let's use group_by/summarize to generate the mean valaues for both groups. This is important because normally the geom_bar() function will generate the bar plot based upon the count of each group. But, we can provide explicit y-values to it (in our case, the mean), as long as we use the attribute stat="identity":
+
+
+```{r}
+
+flipper_summary<-flippers%>%na.omit()%>%group_by(species)%>%summarize(avg_flipper_length_mm=mean(flipper_length_mm))
+
+ggplot(data=flipper_summary, mapping = aes(x=species,y=avg_flipper_length_mm, fill=species ))+geom_bar(stat="identity")
+
+
+```
+
+
+
+YOUR TURN:
+
+Generate a box plot and bar plot for your comparison of bill length between Gentoo and Adelie penguins.
+
+```{r}
+
+
+
+
+```
+
+
+
+## ANOVAs
+
+An ANOVA, or Analysis of Variance, compares the means of two or more groups, and provides p-values similar to a t-test. 
+
+Let's run an ANOVA to compare mean bill lenghts among the three species of penguins:
+
+```{r}
+
+bills_aov<-aov(bill_length_mm~species, data=penguins)
+
+bills_aov
+
+summary(bills_aov)
+
+
+
+```
+
+
+
+
 
