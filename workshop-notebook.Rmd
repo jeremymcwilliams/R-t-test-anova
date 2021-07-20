@@ -115,16 +115,39 @@ Let's run an ANOVA to compare mean bill lenghts among the three species of pengu
 
 ```{r}
 
-bills_aov<-aov(bill_length_mm~species, data=penguins)
+bills_aov<-aov(bill_length_mm ~ species, data=penguins)
 
-bills_aov
+
 
 summary(bills_aov)
 
-
+#TukeyHSD(bills_aov)
 
 ```
 
+
+The summary statement indicates that there is some statistical significance identified, given the 3 asterisks next to the Pr(>F) value. Of course, the question is "significant between which groups?". We can now use the "TukeyHSD" function to yield that information:
+
+```{r}
+TukeyHSD(bills_aov)
+```
+
+If we run the boxplot command below, it sort of visually confirms the p adj values listed above.
+
+
+```{r}
+ggplot(data=penguins, mapping = aes(species, bill_length_mm))+geom_boxplot()
+```
+
+
+YOUR TURN:
+
+Use the ANOVA test to check for differences in bill depth among the three species. Create a bar plot to show the results.
+
+
+```{r}
+
+```
 
 
 
